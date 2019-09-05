@@ -4,14 +4,33 @@
 
 ## 目录结构
 
-- app
-    - http：http模块
-    - model ：模型模块
-- routes ：路由配置目录
-- config ：配置文件目录
-- main.go ：入口文件
-- app.ini ：配置文件
-    
+
+```bash
+.
+├── app
+│   ├── http http模块
+│   │   ├── controllers 控制器
+│   │   └── middleware 中间件
+│   ├── logic
+│   └── models 模型
+├── app.ini 配置文件
+├── config 配置文件目录
+├── datebase 数据库
+│   ├── model.go 基本模型
+│   └── softDeletes.go 软删除
+├── go.mod
+├── go.sum
+├── main.go 服务入口文件
+├── migrate.go 迁移脚本
+├── pkg
+│   └── setting
+│       └── setting.go
+├── README.md
+└── routes 路由
+    └── api.go
+
+```
+
 
 
 ## 模块
@@ -30,3 +49,12 @@
 
 
 ## 规范
+
+
+## 使用
+
+### 迁移
+
+```bash
+go run migrate.go
+```
