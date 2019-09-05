@@ -1,0 +1,27 @@
+#debug or release
+RUN_MODE = debug
+
+[app]
+PAGE_SIZE = 10
+JWT_SECRET = 23347$040412
+
+[server]
+HTTP_PORT = 9000
+READ_TIMEOUT = 60
+WRITE_TIMEOUT = 60
+
+[database]
+#数据库类型
+CONNECTION = mysql
+#数据库IP
+HOST = 192.168.199.254
+#数据库端口号
+PORT = 3306
+#数据库名称
+NAME = ai_saas
+# 数据库账号
+USERNAME = root
+# 数据库密码
+PASSWORD = root
+#表前缀
+PREFIX =
