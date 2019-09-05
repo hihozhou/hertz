@@ -14,14 +14,14 @@ WRITE_TIMEOUT = 60
 #数据库类型
 CONNECTION = mysql
 #数据库IP
-HOST = 192.168.199.254
+HOST = 127.0.0.1
 #数据库端口号
 PORT = 3306
 #数据库名称
-NAME = ai_saas
+NAME =
 # 数据库账号
-USERNAME = root
+USERNAME =
 # 数据库密码
-PASSWORD = root
+PASSWORD =
 #表前缀
 PREFIX =

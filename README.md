@@ -18,4 +18,15 @@
 
 - gin框架：github.com/gin-gonic/gin
 - 配置读取：github.com/go-ini/ini
+- orm：github.com/jinzhu/gorm
 
+## Feature
+
+- 中间件
+- 验证器
+- rpc
+- http、rpc分块，按需加载
+- tool管理
+
+
+## 规范

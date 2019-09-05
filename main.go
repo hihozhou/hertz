@@ -14,12 +14,6 @@ func main() {
 
 	//获取路由
 	route := gin.Default()
-	route.GET("/", func(context *gin.Context) {
-		context.JSON(200, gin.H{
-			"err_code":    0,
-			"err_message": "index page！",
-		})
-	})
 
 	routes.CreateRoutes(route)
 
