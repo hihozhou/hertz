@@ -1,12 +1,12 @@
 package controllers
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"hertz/app/http/validator"
 	"hertz/app/logic"
 	"hertz/app/models"
 	"hertz/datebase"
-	"net/http"
 )
 
 type Index struct {
@@ -16,29 +16,39 @@ func (index Index) Index(context *gin.Context) {
 	Success(context, gin.H{"number": 1})
 }
 
-func (index Index) Login(context *gin.Context) () {
-	//验证器验证
+//登录验证
+func validateLogin(context *gin.Context) validator.Login {
 	var params validator.Login
-	// This will infer what binder to use depending on the content-type header.
 	if err := context.ShouldBind(&params); err != nil {
-		context.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+		panic(err.Error())
 	}
+	return params
+}
+
+//登录方法
+func (index Index) Login(context *gin.Context) () {
+	defer func() {
+		if err := recover(); err != nil {
+			fmt.Println("捕获异常:", err)
+			Fail(context, fmt.Sprintf("%s", err), gin.H{})
+		}
+	}()
+	//验证器验证
+	params := validateLogin(context)
 	//查询账号
 	user := models.User{}
 	if datebase.DB.Where("phone = ?", params.Phone).First(&user).RecordNotFound() {
-		Fail(context, "账号或密码错误1", gin.H{})
-		return
+		panic("账号或密码错误")
 	}
 	var userLogic logic.UserLogic
 	if !userLogic.PasswordCheck(&user, params.Password) {
-		Fail(context, "账号或密码错误2", gin.H{})
-		return
+		panic("账号或密码错误")
 	}
-	//使用jwt登录
+	//todo 使用jwt登录
 	Success(context, gin.H{"data": "账号密码正确"})
 }
 
+//个人中心
 func (index Index) Home(context *gin.Context) {
 	Success(context, gin.H{"number": 1})
 }
