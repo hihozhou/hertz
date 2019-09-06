@@ -14,7 +14,7 @@ type UserLogic struct {
 
 /*
 密码加密方法
-author：hihozhou
+@author：hihozhou
  */
 func (userLogic *UserLogic) PasswordEncryption(password string) string {
 	data := []byte(password)

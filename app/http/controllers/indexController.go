@@ -11,11 +11,12 @@ import (
 type IndexController struct {
 }
 
+// 首页
 func (index IndexController) Index(context *gin.Context) {
 	Success(context, gin.H{"number": 1})
 }
 
-//登录验证
+// 登录验证
 func validateLogin(context *gin.Context) validator.LoginValidator {
 	var params validator.LoginValidator
 	if err := context.ShouldBind(&params); err != nil {
@@ -24,7 +25,7 @@ func validateLogin(context *gin.Context) validator.LoginValidator {
 	return params
 }
 
-//尝试登录
+// 尝试登录
 func attemptLogin(params *validator.LoginValidator) (user *models.User) {
 	var userLogic logic.UserLogic
 	var err error
@@ -37,8 +38,8 @@ func attemptLogin(params *validator.LoginValidator) (user *models.User) {
 	return user
 }
 
-//登录方法
-//@author hihozhou
+// 登录方法
+// @author hihozhou
 func (index IndexController) Login(context *gin.Context) () {
 	defer func() {
 		if err := recover(); err != nil {
@@ -49,11 +50,13 @@ func (index IndexController) Login(context *gin.Context) () {
 	params := validateLogin(context)
 	//查询账号
 	user := attemptLogin(&params)
+
+	data := logic.Login(user)
 	//todo 使用jwt登录
-	Success(context, gin.H{"data": user, "message": "登录成功"})
+	Success(context, data)
 }
 
-//个人中心
+// 个人中心
 func (index IndexController) Home(context *gin.Context) {
 	Success(context, gin.H{"number": 1})
 }

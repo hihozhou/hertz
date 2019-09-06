@@ -10,8 +10,9 @@
 ├── app
 │   ├── http http模块
 │   │   ├── controllers 控制器
-│   │   └── middleware 中间件
-│   ├── logic
+│   │   ├── middleware 中间件
+│   │   └── validator 验证器
+│   ├── logic 逻辑模块
 │   └── models 模型
 ├── app.ini 配置文件
 ├── config 配置文件目录
@@ -39,13 +40,15 @@
 - 配置读取：github.com/go-ini/ini
 - orm：github.com/jinzhu/gorm
 
+
 ## Feature
 
 - 中间件
-- 验证器
 - rpc
 - http、rpc分块，按需加载
 - tool管理
+- 命令：平滑重启，热更新
+- view
 
 
 ## 规范

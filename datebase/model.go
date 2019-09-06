@@ -10,10 +10,11 @@ import (
 
 var DB *gorm.DB
 
-//基本模型
+// 基本模型
 type Model struct {
 }
 
+// 初始化数据库配置
 func init() {
 	var (
 		err                                                        error
@@ -62,6 +63,7 @@ func init() {
 	DB.DB().SetMaxOpenConns(100)
 }
 
+// 关闭数据库链接
 func CloseDB() {
 	defer DB.Close()
 }

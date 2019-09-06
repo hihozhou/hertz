@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-//用户表
+// 用户表
 type User struct {
 	datebase.Model
 	ID        int       `gorm:"primary_key;AUTO_INCREMENT" json:"id"`       //主键id
