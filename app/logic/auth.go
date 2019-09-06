@@ -9,15 +9,13 @@ import (
 
 // 验证信息结构体
 type Auth struct {
-	ID       int    `gorm:"primary_key" json:"id"`
+	ID       int    `json:"id"`
 	Nickname string `json:"nickname"`
 	Phone    string `json:"phone"`
 }
 
 func GenerateToken(user *models.User) (string, error) {
-	jwt := &JWT{
-		[]byte("&*(^^fewi23&^"),
-	}
+	jwt := NewJWT()
 	claims := CustomClaims{
 		user.ID,
 		user.Nickname,
@@ -38,7 +36,21 @@ func Login(user *models.User) gin.H {
 		panic("创建token失败：" + err.Error())
 	}
 	return gin.H{
-		"user":  user,
+		"user": gin.H{
+			"id":       user.ID,
+			"phone":    user.Phone,
+			"nickname": user.Nickname,
+		},
 		"token": token,
 	}
+}
+
+func User(c *gin.Context) (result *CustomClaims) {
+	claims, exists := c.Get("claims")
+	if !exists {
+		panic("找不到登录信息")
+	}
+
+	result = claims.(*CustomClaims)
+	return result
 }

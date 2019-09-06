@@ -33,8 +33,8 @@ func Fail(c *gin.Context, errorMsg string, data gin.H) {
 }
 
 //
-func Unauthorized(c *gin.Context) {
-	Response(c, http.StatusUnauthorized, 1, "Request Unauthorized", gin.H{})
+func Unauthorized(c *gin.Context, errorCode int, extraMessage string) {
+	Response(c, http.StatusUnauthorized, errorCode, "Request Unauthorized", gin.H{"extra_message": extraMessage})
 	c.Abort()
 }
 

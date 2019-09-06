@@ -12,14 +12,14 @@ type IndexController struct {
 }
 
 // 首页
-func (index IndexController) Index(context *gin.Context) {
-	Success(context, gin.H{"number": 1})
+func (index IndexController) Index(c *gin.Context) {
+	Success(c, gin.H{"number": 1})
 }
 
 // 登录验证
-func validateLogin(context *gin.Context) validator.LoginValidator {
+func validateLogin(c *gin.Context) validator.LoginValidator {
 	var params validator.LoginValidator
-	if err := context.ShouldBind(&params); err != nil {
+	if err := c.ShouldBind(&params); err != nil {
 		panic(err.Error())
 	}
 	return params
@@ -40,23 +40,24 @@ func attemptLogin(params *validator.LoginValidator) (user *models.User) {
 
 // 登录方法
 // @author hihozhou
-func (index IndexController) Login(context *gin.Context) () {
+func (index IndexController) Login(c *gin.Context) () {
 	defer func() {
 		if err := recover(); err != nil {
-			Fail(context, fmt.Sprintf("%s", err), gin.H{})
+			Fail(c, fmt.Sprintf("%s", err), gin.H{})
 		}
 	}()
 	//验证器验证
-	params := validateLogin(context)
+	params := validateLogin(c)
 	//查询账号
 	user := attemptLogin(&params)
 
 	data := logic.Login(user)
 	//todo 使用jwt登录
-	Success(context, data)
+	Success(c, data)
 }
 
 // 个人中心
-func (index IndexController) Home(context *gin.Context) {
-	Success(context, gin.H{"number": 1})
+func (index IndexController) Home(c *gin.Context) {
+	//value, exists := c.Get("claims")
+	Success(c, gin.H{"info": logic.User(c)})
 }
