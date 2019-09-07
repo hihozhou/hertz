@@ -1,0 +1,105 @@
+.form-login-layout{
+    background-color: #F8F8F8;
+    width: 100%;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 110px 0;
+    overflow: hidden;
+}
+.login-content{
+    width: 375px;
+    margin: 60px auto 0 auto;
+    box-sizing: border-box;
+    background-color: #fff;
+    box-shadow: rgba(100, 100, 100, 0.05) 0px 0px 1px, rgba(100, 100, 100, 0.05) 4px 2px 3px, rgba(100, 100, 100, 0.05) 10px 5px 6px, rgba(100, 100, 100, 0.05) 21px 11px 10px, rgba(100, 100, 100, 0.05) 35px 19px 15px, rgba(100, 100, 100, 0.05) 54px 29px 21px;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.login-title{
+    text-align: center;
+    color: #81D3CC;
+    margin-left: -25px;
+    font-weight: bold;
+    text-shadow: 0px 1px 1px #76BFB9;
+    padding-left: 20px;
+    padding-top: 50px;
+}
+.login-title h2{
+    font-size: 30px;  
+}
+.form-tab{
+   
+}
+.layadmin-user-login-box {
+	padding: 20px
+}
+.layadmin-user-login-body .layui-form-item {
+	position: relative
+}
+.layadmin-user-login-body .layui-form-item .layui-input {
+	padding-left: 38px
+}
+.layadmin-user-login-body .layui-form-item {
+	position: relative
+}
+.layadmin-user-login-body .layui-form-item .layui-input {
+	padding-left: 38px
+}
+.layadmin-user-login-icon {
+	position: absolute;
+	left: 1px;
+	top: 1px;
+	width: 38px;
+	line-height: 36px;
+	text-align: center;
+	color: #d2d2d2
+}
+.layadmin-user-login-other .layui-icon {
+	position: relative;
+	top: 2px;
+	font-size: 26px
+}
+.layui-btn {
+    display: inline-block;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 18px;
+    background-color: #81D3CC;
+    color: #fff;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 16px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    margin-bottom: 40px;
+}
+.layadmin-user-jump-change{
+    float: right;
+    cursor: pointer;
+    color: #81D3CC;
+}
+/* .layui-icon-username:before {
+    content: "&#xe68e";
+} */
+::-webkit-input-placeholder {/*Chrome/Safari*/
+    color:#ccc;
+    }
+::-moz-placeholder {/*Firefox*/
+    color:#ccc;
+    }
+::-ms-input-placeholder {/*IE*/
+       color:#ccc;
+    } 
+/*@media*/
+@media screen and (max-width:768px) {
+	.layadmin-user-login-box {
+		padding: 10px
+    }
+    .login-content{     
+        margin: -30px 10px 0 10px;
+        box-sizing: border-box;
+    }
+}

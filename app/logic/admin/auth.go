@@ -1,4 +1,4 @@
-package logic
+package admin
 
 import (
 	jwtgo "github.com/dgrijalva/jwt-go"
@@ -14,12 +14,12 @@ type Auth struct {
 	Phone    string `json:"phone"`
 }
 
-func GenerateToken(user *models.User) (string, error) {
+func GenerateToken(admin *models.Admin) (string, error) {
 	jwt := NewJWT()
 	claims := CustomClaims{
-		user.ID,
-		user.Nickname,
-		user.Phone,
+		admin.ID,
+		admin.Nickname,
+		admin.Phone,
 		jwtgo.StandardClaims{
 			NotBefore: int64(time.Now().Unix() - 1000), // 签名生效时间
 			ExpiresAt: int64(time.Now().Unix() + 3600), // 过期时间 一小时
@@ -30,16 +30,16 @@ func GenerateToken(user *models.User) (string, error) {
 }
 
 // 登录操作
-func Login(user *models.User) gin.H {
-	token, err := GenerateToken(user)
+func Login(admin *models.Admin) gin.H {
+	token, err := GenerateToken(admin)
 	if err != nil {
 		panic("创建token失败：" + err.Error())
 	}
 	return gin.H{
 		"user": gin.H{
-			"id":       user.ID,
-			"phone":    user.Phone,
-			"nickname": user.Nickname,
+			"id":       admin.ID,
+			"phone":    admin.Phone,
+			"nickname": admin.Nickname,
 		},
 		"token": token,
 	}
