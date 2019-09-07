@@ -5,6 +5,8 @@ import (
 	"hertz/app/http/controllers"
 	"hertz/app/http/controllers/admin"
 	"hertz/app/http/middleware"
+	adminMiddleware "hertz/app/http/middleware/admin"
+	adminModule "hertz/app/logic/admin"
 	"net/http"
 )
 
@@ -21,13 +23,15 @@ func CreateRoutes(router *gin.Engine) {
 	router.POST("/login", indexController.Login)
 	router.GET("/home", middleware.Authenticate(), indexController.Home)
 
+
+	authController := &admin.AuthController{}
+	router.GET(adminModule.LOGIN_PATH, adminMiddleware.RedirectIfAuthenticated(), authController.LoginForm)
+	router.POST("/admin/login", authController.Login)
 	//后台路由
-	adminGroup := router.Group("/admin")
+	adminGroup := router.Group("/admin", adminMiddleware.Authenticate())
 	{
 		adminIndex := &admin.IndexController{}
-		authController := &admin.AuthController{}
-		adminGroup.GET("/login", authController.LoginForm)
-		adminGroup.POST("/login", authController.Login)
+
 		adminGroup.GET("/", adminIndex.Index)
 	}
 

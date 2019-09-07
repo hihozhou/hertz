@@ -7,6 +7,11 @@ import (
 	"time"
 )
 
+const AUTH_TOKEN_KEY string = "admin_auth_token"
+const AUTH_TOKEN_MAX_AGE int = 3600
+const LOGIN_PATH = "/admin/login"
+const HOME_PATH = "/admin"
+
 // 验证信息结构体
 type Auth struct {
 	ID       int    `json:"id"`
@@ -30,19 +35,22 @@ func GenerateToken(admin *models.Admin) (string, error) {
 }
 
 // 登录操作
-func Login(admin *models.Admin) gin.H {
+func Login(c *gin.Context, admin *models.Admin) gin.H {
 	token, err := GenerateToken(admin)
 	if err != nil {
 		panic("创建token失败：" + err.Error())
 	}
-	return gin.H{
-		"user": gin.H{
-			"id":       admin.ID,
-			"phone":    admin.Phone,
-			"nickname": admin.Nickname,
-		},
-		"token": token,
-	}
+	//保存到cookie中
+	c.SetCookie(AUTH_TOKEN_KEY, token, AUTH_TOKEN_MAX_AGE, "/", c.Request.Host, false, true)
+	return gin.H{"url": HOME_PATH}
+	//return gin.H{
+	//	"admin": gin.H{
+	//		"id":       admin.ID,
+	//		"phone":    admin.Phone,
+	//		"nickname": admin.Nickname,
+	//	},
+	//	"token": token,
+	//}
 }
 
 // 获取登录的用户信息

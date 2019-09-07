@@ -52,7 +52,7 @@
 
     <script src="/static/layui/layui.js"></script>
     <script type="text/javascript">
-        layui.config({base: '/static/js/'}).use(['form', 'layer', 'jquery'], function () {
+        layui.config({base: '/static/js/admin'}).use(['form', 'layer', 'jquery'], function () {
             var $ = layui.jquery;
             var form = layui.form;
             $('#login-btn').click(function (event) {
@@ -106,6 +106,8 @@
                     },
                     success: function (res) {
                         layer.close(load);
+                        //保存jwt
+                        console.log(res)
                         //登入成功的提示与跳转
                         if (res.error_code == 0) {
                             layer.msg('登入成功', {

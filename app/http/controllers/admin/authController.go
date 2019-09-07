@@ -53,6 +53,6 @@ func (auth AuthController) Login(c *gin.Context) {
 	//查询账号
 	admin := attemptLogin(&params)
 
-	data := adminLogic.Login(admin)
+	data := adminLogic.Login(c,admin)
 	controllers.Success(c, data)
 }
