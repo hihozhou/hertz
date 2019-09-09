@@ -23,7 +23,6 @@ func CreateRoutes(router *gin.Engine) {
 	router.POST("/login", indexController.Login)
 	router.GET("/home", middleware.Authenticate(), indexController.Home)
 
-
 	authController := &admin.AuthController{}
 	router.GET(adminModule.LOGIN_PATH, adminMiddleware.RedirectIfAuthenticated(), authController.LoginForm)
 	router.POST("/admin/login", authController.Login)
@@ -33,6 +32,8 @@ func CreateRoutes(router *gin.Engine) {
 		adminIndex := &admin.IndexController{}
 
 		adminGroup.GET("/", adminIndex.Index)
+		adminGroup.GET("/index/console", adminIndex.Console)
+
 	}
 
 }

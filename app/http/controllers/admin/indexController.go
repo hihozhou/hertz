@@ -15,3 +15,7 @@ func (index IndexController) Index(c *gin.Context) {
 		"menus": config.Menus,
 	})
 }
+
+func (index IndexController) Console(c *gin.Context) {
+	c.HTML(http.StatusOK, "admin/index/console.html", gin.H{})
+}

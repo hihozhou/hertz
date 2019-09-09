@@ -39,6 +39,7 @@
 - gin框架：github.com/gin-gonic/gin
 - 配置读取：github.com/go-ini/ini
 - orm：github.com/jinzhu/gorm
+- html模板： golang 的html/template库
 
 
 ## Feature
