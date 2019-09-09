@@ -1,12 +1,290 @@
 {{define "admin/index/index.html"}}
     <!DOCTYPE html>
-    <html lang="en">
+    <html lang="zh">
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>后台系统</title>
+        <link rel="stylesheet" href="/static/layui/css/layui.css">
+        <link rel="stylesheet" href="/static/css/admin/layout.css">
     </head>
-    <body>
+    <body class="layui-layout-body layui-unselect">
+    <div class="layui-layout layui-layout-admin layadmin-side-spread-sm" id="LAY_app">
+        <!--顶部导航开始-->
+        <div class="layui-header">
+            <ul class="layui-nav layui-layout-left lying-nav-fold" id="close-header">
+                <li class="layui-nav-item layadmin-flexible" lay-unselect="" id="close-item">
+                    <a href="javascript:;" layadmin-event="flexible" title="侧边伸缩">
+                        <i class="layui-icon layui-icon-spread-left layui-icon-shrink-right " id="LAY_app_flexible"></i>
+                    </a>
+                </li>
+                <li class="layui-nav-item" lay-unselect="">
+                    <a href="/admin/statistic/index" target="_blank" title="数据看板">
+                        <i class="layui-icon layui-icon-chart-screen">&#xe629;</i>
+                    </a>
+                </li>
+                <span class="layui-nav-bar" style="width: 0px; left: 0px; opacity: 0;"></span>
+            </ul>
+            <ul class="layui-nav layui-layout-right">
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;">贤心</a>
+                    <dl class="layui-nav-child">
+                        <dd><a href="###">基本资料</a></dd>
+                        <dd><a href="###">安全设置</a></dd>
+                        <dd id="cacheClear"><a href="javascript:;">清除缓存</a></dd>
+                    </dl>
+                </li>
+                <li class="layui-nav-item" lay-unselect><a href="/admin/login/logout">退了</a></li>
+                <li class="layui-nav-item" lay-unselect>
+                    <a href="javascript:;" id="pop-right">
+                        <i class="layui-icon layui-icon-more-vertical"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <!--顶部导航结束-->
 
+        <!--侧边菜单开始-->
+        <div class="layui-side layui-side-menu my-tips" id="close-aside">
+            <div class="layui-side-scroll">
+
+                <ul class="layui-nav layui-nav-tree">
+
+                    <li class="layui-header">
+                        <a href="###" class="lying-logo-mini">
+                            <i class="layui-icon">&#xe609;</i>
+                        </a>
+                        <a href="###" class="layui-logo" style="text-align:center;left:20px;">One Hour</a>
+                    </li>
+                    <!-- lying-nav-open-->
+                    {{range $menu:=.menus}}
+                        <li class="lying-nav-item">
+                            <a class="lying-nav-header" href="javascript:;">
+                                <div class="lying-nav-icon"><i class="layui-icon">&#xe602;</i></div>
+                                <span class="lying-nav-title">{{.Name}}</span>
+                            </a>
+                            <dl class="lying-nav-child">
+                                {{ $length := len .Child }}{{if gt $length 0}}
+                                    {{range .Child}}
+                                        <dd>
+                                            <a href="javascript:;"
+                                               lying-src="{{.Url}}">
+                                                <div class="lying-nav-icon"><i
+                                                            class="layui-icon">&#xe63f;</i>
+                                                </div>
+                                                <span class="lying-nav-title">{{.Name}}</span>
+                                            </a>
+                                        </dd>
+                                    {{end}}
+                                {{end}}
+                            </dl>
+                        </li>
+                    {{end}}
+
+                </ul>
+            </div>
+        </div>
+        <!--侧边菜单结束-->
+
+        <!--内容主体区域开始-->
+        <div class="layui-body" id="close-body">
+            <!-- 控制台页面 -->
+            <div class="layui-tab layui-tab-brief" lay-allowClose="true" lay-filter="tabs">
+                <div class="lying-tab-goleft"><i class="layui-icon">&#xe65a;</i></div>
+                <div class="lying-tab-goright"><i class="layui-icon">&#xe65b;</i></div>
+                <div class="lying-tab-refresh"><i class="layui-icon">&#x1002;</i></div>
+                <ul class="layui-tab-title">
+                    <li class="layui-this"><i class="layui-icon">&#xe68e;</i>首页</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <iframe src="/admin/index/console"></iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!--内容主体区域结束-->
+        <!--model-->
+        <!-- <div class="layadmin-body-shade" layadmin-event="shade" id="console-model"></div> -->
+        <input type="hidden" id="admin_id" value="{$adminId}">
+        <input type="hidden" id="socket_url" value="{$socketUrl}">
+        <input type="hidden" id="notification_count" value="{$notificationCount}">
+
+    </div>
     </body>
+    <script src="/static/layui/layui.js"></script>
+    <script src="/static/js/admin/common/reconnecting-websocket.min.js"></script>
+    <script>
+        layui.config({base: "/static/js/admin/"}).use(["layout", "layer"], function () {
+            var $ = layui.$,
+                layout = layui.layout;
+            layer = layui.layer;
+            element = layui.element;
+            window.tabShowLink = tabShowLink;
+
+            //跳转tab链接
+            function tabShowLink(link, title) {
+                var aDom = document.createElement("a");
+                aDom.setAttribute("lying-src", link);
+                aDom.href = "javascript:;";
+                var str =
+                    '<div class="lying-nav-icon"><i class="layui-icon"></i></div>';
+                var menuTitle = '<span class="lying-nav-title">' + title + "</span>";
+                aDom.innerHTML = str + menuTitle;
+                document.body.append(aDom);
+                aDom.click();
+            }
+
+            window.closeCurrentLink = closeCurrentLink;
+
+            function closeCurrentLink(link) {
+                element.tabDelete('tabs', link); //删除：“商品管理”
+            }
+
+            window.tabShowLink = tabShowLink;
+
+            //跳转tab链接
+            function tabShowLink(link, title) {
+                var aDom = document.createElement("a");
+                aDom.setAttribute("lying-src", link);
+                aDom.href = "javascript:;";
+                var str =
+                    '<div class="lying-nav-icon"><i class="layui-icon"></i></div>';
+                var menuTitle = '<span class="lying-nav-title">' + title + "</span>";
+                aDom.innerHTML = str + menuTitle;
+                document.body.append(aDom);
+                aDom.click();
+            }
+
+            //判断是否是json
+            function isJSON(str) {
+                if (typeof str == "string") {
+                    try {
+                        var obj = JSON.parse(str);
+                        if (typeof obj == "object" && obj) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    } catch (e) {
+                        console.log("error：" + str + "!!!" + e);
+                        return false;
+                    }
+                }
+            }
+
+            function connectNotice(title, content, callback) {
+                layer.alert(
+                    '<div style="margin:10px 10px 0 10px;">' + content + "</div>",
+                    {
+                        type: 1,
+                        skin: "layui-layer-molv",
+                        shade: 0,
+                        title: title,
+                        fixed: "false",
+                        offset: "rb",
+                        anim: 6, //动画类型
+                        btn: ["点击查看"],
+                        yes: function () {
+                            if (callback) callback();
+                            else layer.msg("我已阅读");
+                            layer.close(layer.index);
+                        }
+                    }
+                );
+            }
+
+
+            //弹出抽屉
+            $("#pop-right").click(function () {
+                layout.popRight({
+                    title: "抽屉标题",
+                    content: "抽屉内容"
+                });
+            });
+
+            //导航
+            function winWidth() {
+                return $(window).width();
+            }
+
+            function slideScroll(a) {
+                if (a > 960) {
+                    var onOff = true;
+                    $("#close-item").click(function () {
+                        if (onOff) {
+                            $("#close-aside").addClass("width50");
+                            $("#close-body").addClass("left50");
+                            $("#close-header").addClass("left50");
+                            $("#console-model").removeClass("show-block");
+                            $("#close-aside .layui-nav-tree").addClass("width50");
+                            onOff = false;
+                        } else {
+                            $("#close-aside").removeClass("width50");
+                            $("#close-body").removeClass("left50");
+                            $("#close-header").removeClass("left50");
+                            $("#close-aside .layui-nav-tree").removeClass("width50");
+                            onOff = true;
+                        }
+                    });
+                } else if (a <= 960) {
+                    /*960下先禁用侧栏*/
+                    $("#close-aside").addClass("width0");
+                    $("#close-body").addClass("left0");
+                    $("#close-header").addClass("left0");
+                    var onOffMin = true;
+                    $("#close-item").click(function () {
+                        if (onOffMin) {
+                            console.log("3");
+                            $("#close-aside").removeClass("width0");
+                            $("#close-body").removeClass("left0");
+                            $("#close-header").removeClass("left0");
+
+                            //出现弹窗
+                            $("#console-model").addClass("show-block");
+                            onOffMin = false;
+                        } else {
+                            console.log("4");
+                            $("#close-aside").addClass("width0");
+                            $("#close-header").addClass("left0");
+                            $("#close-body").addClass("left0");
+
+                            $("#console-model").removeClass("show-block");
+
+                            onOffMin = true;
+                        }
+                    });
+                }
+            }
+
+            $('#cacheClear').on('click', function () {
+                $.ajax({
+                    type: "post",
+                    url: "{:url('config/cacheClear')}",
+                    async: false,
+                    data: {},
+                    success: function (res) {
+                        if (res.error_code == 0) {
+                            layer.msg('缓存清除成功', {
+                                time: 1000,
+                            }, function () {
+
+                            });
+                        } else if (res.error_code == 1) {
+                            layer.msg(res.error_msg);
+                        }
+                    },
+                    error: function (error) {
+
+                    },
+                });
+            });
+
+            slideScroll(winWidth());
+        });
+    </script>
     </html>
 {{end}}
