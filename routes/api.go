@@ -34,6 +34,10 @@ func CreateRoutes(router *gin.Engine) {
 		adminGroup.GET("/", adminIndex.Index)
 		adminGroup.GET("/index/console", adminIndex.Console)
 
+		adminController := &admin.AdminController{}
+		adminGroup.GET("/admin", adminController.Index)
+		adminGroup.GET("/admin/index", adminController.Index)
+
 	}
 
 }

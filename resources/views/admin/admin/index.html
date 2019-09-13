@@ -1,12 +1,504 @@
 {{define "admin/admin/index.html"}}
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>后台管理系统</title>
-    </head>
-    <body>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>控制台主页一</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="/static/css/admin/admin.css" media="all">
+</head>
+<body>
 
-    </body>
-    </html>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-row layui-col-space15">
+
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">管理员数据</div>
+                        <div class="layui-card-body">
+                            <div class="layui-btn-group">
+                                <button class="layui-btn" id="createAdmin">
+                                    <i class="layui-icon">&#xe654;</i></button>
+                                <!--<button class="layui-btn layui-btn-lg"><i class="layui-icon">&#xe640;</i></button>-->
+                            </div>
+
+                            <div class="layui-inline">
+                                <div class="layui-inline">
+                                    <input class="layui-input" name="name" id="search_name_tel" placeholder="用户名/手机"
+                                           autocomplete="off">
+                                </div>
+                                <button class="layui-btn" data-type="reload" id="search"><i
+                                            class="layui-icon">&#xe615;</i> 搜索
+                                </button>
+                            </div>
+                            <table id="admin_table" lay-filter="admin_table"></table>
+                            <!--分页-->
+                            <div id="laypage"></div>
+                            <!--end 分页-->
+
+                            <!--<div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-dataview">-->
+                            <!--<div carousel-item id="LAY-index-dataview">-->
+                            <!--<div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>-->
+                            <!--<div></div>-->
+                            <!--<div></div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<!--新增 / 修改 弹窗-->
+<div class="popupCon" id="newForm">
+    <div class="popRow layui-clear">
+        <div class="popRow_l">账号</div>
+        <div class="popRow_r">
+            <input type="text" id="account" placeholder="请填写账号" class="layui-input">
+        </div>
+    </div>
+    <div class="popRow layui-clear">
+        <div class="popRow_l">手机号码</div>
+        <div class="popRow_r">
+            <input type="text" id="phone" lay-verify="phone" placeholder="手机号" class="layui-input">
+        </div>
+    </div>
+
+    <div class="popRow layui-clear">
+        <div class="popRow_l">备注</div>
+        <div class="popRow_r">
+            <input type="text" id="remark" placeholder="备注" class="layui-input">
+        </div>
+    </div>
+    <!--<div class="popRow layui-clear">-->
+    <!--<div class="popRow_l">邮箱</div>-->
+    <!--<div class="popRow_r">-->
+    <!--<input type="text" id="email" lay-verify="email" placeholder="邮箱" class="layui-input">-->
+    <!--</div>-->
+    <!--</div>-->
+    <div class="popRow layui-clear" id="initPassWordCon">
+        <div class="popRow_l">初始密码</div>
+        <div class="popRow_r">
+            <input type="text" id="password" placeholder="请设置初始登录密码" class="layui-input">
+        </div>
+    </div>
+    <div class="popRow layui-clear layui-form">
+        <div class="popRow_l">状态</div>
+        <div class="popRow_r ">
+            <div class="layui-input-inline">
+                <input type="radio" name="status" value="1" title="启用">
+                <input type="radio" name="status" value="0" title="禁用">
+            </div>
+        </div>
+    </div>
+    <div class="popRow layui-clear layui-form">
+        <div class="popRow_l">角色</div>
+        <div class="popRow_r" style="overflow:auto">
+            <div style="max-height:230px">
+                <ul style="font-size: 12px;" class="layui-form">
+                    <li>
+                        {volist name="roles" id="role"}
+                        <input type="checkbox" name="roles" value="{$role['id']}" lay-skin="primary"
+                               title="{$role['name']}" lay-filter="permission">
+                        {/volist}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="popRow layui-clear layui-form">
+        <div class="popRow_l">区域</div>
+        <div class="popRow_r" style="overflow:auto">
+            <div style="max-height:230px">
+                <ul style="font-size: 12px;" class="layui-form">
+                    <li>
+                        {volist name="regional_manager" id="item"}
+                        <input type="checkbox" name="regional_manager" value="{$item['id']}" lay-skin="primary"
+                               title="{$item['name']}" lay-filter="regional_manager">
+                        {/volist}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--重置密码 弹窗-->
+<div class="popupCon" id="resetPasswordForm">
+    <div class="popRow layui-clear">
+        <div class="popRow_l">新密码</div>
+        <div class="popRow_r">
+            <input type="text" id="resetPassword" placeholder="请填写密码" class="layui-input">
+        </div>
+    </div>
+</div>
+
+
+<!--end新增 / 修改 弹窗-->
+
+<script type="text/html" id="operation">
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="repwd">重置密码</a>
+    <%  if(d.status == 1){ %>
+    <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="ban">禁用</a>
+    <%  } else { %>
+    <a class="layui-btn layui-btn-xs" lay-event="active">启用</a>
+    <%  } %>
+    <!--<a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="delete">删除</a>-->
+</script>
+
+<script src="/static/layui/layui.js"></script>
+<script src="/static/js/jquery-3.3.1.js"></script>
+<script src="/static/js/admin/utils.js"></script>
+<script>
+    layui.config({
+        open: '<%',
+        close: '%>'
+    }).use(['table', 'form'], function () {
+        var table = layui.table;
+        var form = layui.form;
+
+        function getQueryCondition() {
+            return {
+                // condition: $('#searchInput').val(),
+                // status: $('#main_top_status').val(),
+                // _token: window.Laravel.csrfToken,
+            }
+        }
+
+        var cols = [ //表头
+            {field: 'id', title: 'ID', width: 60, fixed: 'left', sort: true},
+            {field: 'account', title: '账号', width: 190},
+            {field: 'phone', title: '手机号码', width: 130},
+            {field: 'roles_text', title: '角色', width: 130},
+            {field: 'nickname', title: '昵称', width: 60},
+            {field: 'last_login_ip', title: '登录ip', width: 80},
+            {field: 'email', title: '邮箱'},
+            {field: 'remark', title: '备注', width: '20%'},
+            /*{field: 'updated_at',title: '最近登录时间',width: 160},*/
+            {field: 'operation', title: '操作', templet: '#operation', fixed: 'right', width: 250,}
+        ];
+        tableInit(table, '#admin_table', '/admin/admin/index', cols, getQueryCondition());
+
+        //监听工具条
+        table.on('tool(admin_table)', function (obj) {
+            var _this = this;
+            //获得 lay-event 对应的值
+            if (obj.event == 'edit') {
+                obj.title = '编辑账号：' + obj.data.account;
+                layerOpen(obj);
+            }
+            if (obj.event == 'repwd') {
+                layer.open({
+                    type: 1,
+                    area: ['400px', '175px'],
+                    shadeClose: true, //是否点击遮罩关闭
+                    content: $('#resetPasswordForm'),
+                    scrollbar: true,
+                    title: obj.data.account + '重置密码',
+                    success: function () {
+                        $('#resetPasswordForm').css('display', 'block');
+                        $('#resetPassword').val('');
+
+                        form.render();
+                    },
+                    end: function () {
+                        $('#resetPasswordForm').css('display', 'none');
+                    },
+                    btn: ['保存', '取消'], //可以无限个按钮
+                    yes: function (index, layero) {
+                        //按钮【按钮一】的回调
+                        var password = $('#resetPassword').val();
+                        if (password.length < 6) {
+                            layer.msg('密码长度最少6位');
+                            return false;
+                        }
+                        var ajaxData = {};
+                        ajaxData.id = obj.data.id;
+                        ajaxData.password = password;
+                        ajax_post('/admin/admin/update', ajaxData, function (res) {
+                            if (res.error_code == 0) {
+                                layer.msg('保存成功', {
+                                    time: 1000,
+                                }, function () {
+                                    location.reload();
+                                });
+                            } else {
+                                layer.alert(res.error_msg);
+                            }
+                        });
+                    }
+                });
+            } else if (obj.event == 'ban') {
+                layer.confirm('确定禁用' + obj.data.account + '?', {icon: 3, title: '提示'}, function (index) {
+                    $.ajax({
+                        type: "post",
+                        url: "/admin/admin/update",
+                        async: false,
+                        data: {
+                            id: obj.data.id,
+                            status: 0
+                        },
+                        success: function (ret) {
+                            if (ret.error_code == 0) {
+                                layTableChangeStyleOnBan(_this, obj);
+                                // obj.event = 'active';
+                                layer.msg('修改成功', {
+                                    time: 1000,
+                                }, function () {
+                                    layer.close(index);
+                                });
+
+                            } else {
+                                layer.alert(ret.error_msg);
+                            }
+                        }
+                    });
+                });
+            } else if (obj.event == 'active') {
+                layer.confirm('确定启用' + obj.data.account + '?', {icon: 3, title: '提示'}, function (index) {
+                    $.ajax({
+                        type: "post",
+                        url: "/admin/admin/update",
+                        async: false,
+                        data: {
+                            id: obj.data.id,
+                            status: 1
+                        },
+                        success: function (ret) {
+                            if (ret.error_code == 0) {
+                                layTableChangeStyleOnActive(_this, obj);
+
+                                // obj.event = 'ban';
+                                layer.msg('修改成功', {
+                                    time: 1000,
+                                }, function () {
+                                    layer.close(index);
+                                });
+
+                            } else {
+                                layer.alert(ret.error_msg);
+                            }
+                        }
+                    });
+                });
+            } else if (obj.event == 'delete') {
+                layer.confirm('确定删除' + obj.data.account + '?', {icon: 3, title: '提示'}, function (index) {
+                    $.ajax({
+                        type: "post",
+                        url: "/admin/admin/delete",
+                        async: false,
+                        data: {
+                            id: obj.data.id,
+                        },
+                        success: function (ret) {
+                            if (ret.error_code == 0) {
+                                layer.msg('删除成功', {
+                                    time: 1000,
+                                }, function () {
+                                    location.reload();
+                                });
+
+                            } else {
+                                layer.alert(ret.error_msg);
+                            }
+                        }
+                    });
+                });
+            }
+
+        });
+
+
+        function layerOpen(obj) {
+            layer.open({
+                type: 1,
+                area: ['400px', '420px'],
+                shadeClose: true, //是否点击遮罩关闭
+                content: $('#newForm'),
+                scrollbar: true,
+                title: obj.title,
+                success: function () {
+                    $('#newForm').css('display', 'block');
+                    $('#initPassWordCon').css('display', 'block');
+                    // var imagesDiv = $("#imagesDiv");
+                    // imagesDiv.html('');
+
+                    if (obj.event == 'add') { //新建
+                        $('#account').val('');
+                        $('#password').val('');
+                        $('#phone').val('');
+                        $('#remark').val('');
+                        $('input[name=status]').eq(0).prop('checked', true);
+                        $('input:checkbox[name="roles"]').each(function (key, item) {
+                            item.checked = false;
+                        });
+                        $('input:checkbox[name="regional_manager"]').each(function (key, item) {
+                            item.checked = false;
+                        });
+
+
+                    } else if (obj.event == 'edit') { //编辑
+                        $('#remark').val(obj.data.remark);
+                        $('input[name=status]').prop('checked', false);
+                        console.log(obj.data.status);
+                        $('input[name=status]').each(function (index, item) {
+                            console.log($(item).val());
+                            if ($(item).val() == obj.data.status) {
+                                item.checked = true;
+                            }
+                        });
+                        $('#account').val(obj.data.account);
+                        $('#phone').val(obj.data.phone);
+                        $('#remark').val(obj.data.remark);
+                        $('#initPassWordCon').css('display', 'none');
+                        console.log(obj.data);
+                        $('input:checkbox[name="roles"]').each(function (key, item) {
+                            item.checked = false;
+                            for (var child of obj.data.roles) {
+                                if (child.id == item.value) {
+                                    item.checked = true;
+                                    break;
+                                }
+                            }
+                        });
+
+                        $('input:checkbox[name="regional_manager"]').each(function (key, item) {
+                            item.checked = false;
+                            for (var child of obj.data.regional_managers) {
+                                if (child.regional_manager_id == item.value) {
+                                    item.checked = true;
+                                    break;
+                                }
+                            }
+                        });
+                    }
+                    form.render();
+                },
+                end: function () {
+                    $('#newForm').css('display', 'none');
+                },
+                btn: ['保存', '取消'], //可以无限个按钮
+                yes: function (index, layero) {
+                    //按钮【按钮一】的回调
+                    var account = $('#account').val();
+                    var phone = $('#phone').val();
+                    var remark = $('#remark').val();
+                    var status = $('input[name=status]:checked').val();
+                    if (account.length == 0) {
+                        layer.alert('请输入账号');
+                        return false;
+                    }
+                    if (phone.length == 0) {
+                        layer.alert('请输入手机号码');
+                        return false;
+                    }
+                    if (remark.length == 0) {
+                        layer.msg('请输入备注');
+                        return false;
+                    }
+                    var roles = [];
+                    $("input:checkbox[name='roles']:checked").each(function () {
+                        roles.push($(this).val());
+                    });
+
+                    var regional_manager = [];
+                    $("input:checkbox[name='regional_manager']:checked").each(function () {
+                        regional_manager.push($(this).val());
+                    });
+                    //获取图片
+
+                    // ajaxData._token = window.Laravel.csrfToken;
+                    if (obj.event == 'add') {
+                        var ajaxData = {};
+                        ajaxData.account = account;
+                        ajaxData.phone = phone;
+                        ajaxData.remark = remark;
+                        ajaxData.status = status;
+                        ajaxData.roles = roles;
+                        ajaxData.regional_manager = regional_manager;
+                        var password = $('#password').val();
+                        if (password.length == 0) {
+                            layer.msg('请输入密码');
+                            return false;
+                        }
+                        ajaxData.password = password;
+                        ajax_post('/admin/admin/save', ajaxData, function (res) {
+                            if (res.error_code == 0) {
+                                layer.msg('添加成功', {
+                                    time: 1000,
+                                }, function () {
+                                    location.reload();
+                                });
+                            } else {
+                                layer.alert(res.error_msg);
+                            }
+                        });
+                    } else if (obj.event == 'edit') {
+                        obj.data.account = account;
+                        obj.data.phone = phone;
+                        obj.data.remark = remark;
+                        obj.data.status = status;
+                        obj.data.roles = roles;
+                        obj.data.regional_manager = regional_manager;
+                        delete obj.data.password;
+
+                        ajax_post('/admin/admin/update', obj.data, function (res) {
+                            if (res.error_code == 0) {
+                                layer.msg('保存成功', {
+                                    time: 1000,
+                                }, function () {
+                                    location.reload();
+                                });
+                            } else {
+                                layer.alert(res.error_msg);
+                            }
+                        });
+                    }
+
+                }
+            });
+        }
+
+        function getTableOptionWhere() {
+            return {
+                name_tel: $('#search_name_tel').val(),
+            }
+        }
+
+        $('#search').on('click', function () {
+            //执行重载
+            table.reload('admin_table', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                }
+                , where: getTableOptionWhere()
+            });
+        });
+
+        $('#createAdmin').click(function () {
+            layerOpen({
+                event: 'add',
+                title: '新增管理员'
+            });
+        });
+    });
+
+
+</script>
+</body>
+</html>
+
 {{end}}

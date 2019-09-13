@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"hertz/app/http/controllers"
 	"hertz/app/logic/admin"
+	"hertz/pkg/util"
 	"net/http"
 )
 
@@ -15,7 +16,7 @@ func Authenticate() gin.HandlerFunc {
 		token, _ := c.Cookie(admin.AUTH_TOKEN_KEY)
 		if token == "" {
 			//判断是否html还是ajax请求，分别处理
-			if (c.GetHeader("X-Requested-With") == "XMLHttpRequest") {
+			if util.IsAjax(c) {
 				//无效token，没有登录，应该跳转去登录
 				controllers.Unauthorized(c, 1, "")
 			}
