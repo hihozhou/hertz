@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-var DB *gorm.DB
+var dB *gorm.DB
 
 // 基本模型
 type Model struct {
@@ -34,7 +34,7 @@ func init() {
 	port = sec.Key("PORT").String()
 	prefix = sec.Key("PREFIX").String()
 
-	DB, err = gorm.Open(connection, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
+	dB, err = gorm.Open(connection, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8&parseTime=True&loc=Local",
 		username,
 		password,
 		host,
@@ -56,14 +56,18 @@ func init() {
 		logMode = true
 	}
 
-	DB.LogMode(logMode)
+	dB.LogMode(logMode)
 
-	DB.SingularTable(true)
-	DB.DB().SetMaxIdleConns(10)
-	DB.DB().SetMaxOpenConns(100)
+	dB.SingularTable(true)
+	dB.DB().SetMaxIdleConns(10)
+	dB.DB().SetMaxOpenConns(100)
 }
 
 // 关闭数据库链接
 func CloseDB() {
-	defer DB.Close()
+	defer GetDB().Close()
+}
+
+func GetDB() *gorm.DB {
+	return dB
 }

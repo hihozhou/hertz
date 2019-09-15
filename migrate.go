@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	datebase.DB.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&models.User{})
-	datebase.DB.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&models.Admin{})
+	datebase.GetDB.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&models.User{})
+	datebase.GetDB.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(&models.Admin{})
 }

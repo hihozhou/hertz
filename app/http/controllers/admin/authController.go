@@ -30,12 +30,12 @@ func validateLogin(c *gin.Context) adminValidator.LoginValidator {
 
 // 尝试登录
 func attemptLogin(params *adminValidator.LoginValidator) (admin *models.Admin) {
-	var al logic.AdminLogic
+	adminLogic := logic.GetAdminLogic()
 	var err error
-	if admin, err = al.GetByPhone(params.Phone); err != nil {
+	if admin, err = adminLogic.GetByPhone(params.Phone); err != nil {
 		panic(err.Error())
 	}
-	if !al.PasswordCheck(admin, params.Password) {
+	if !adminLogic.PasswordCheck(admin, params.Password) {
 		panic("账号或密码错误")
 	}
 	return admin
@@ -53,6 +53,6 @@ func (auth AuthController) Login(c *gin.Context) {
 	//查询账号
 	admin := attemptLogin(&params)
 
-	data := adminLogic.Login(c,admin)
+	data := adminLogic.Login(c, admin)
 	controllers.Success(c, data)
 }

@@ -6,10 +6,13 @@ import (
 	"fmt"
 	"hertz/app/models"
 	"hertz/datebase"
+	"sync"
 )
 
 type AdminLogic struct {
 }
+
+var adminLogicSingleton *AdminLogic
 
 /*
 密码加密方法
@@ -33,7 +36,7 @@ func (adminLogic *AdminLogic) PasswordCheck(admin *models.Admin, password string
 func (adminLogic *AdminLogic) GetByPhone(phone string) (admin *models.Admin, err error) {
 	admin = &models.Admin{}
 	//err = nil
-	query := datebase.DB.Where("phone = ?", phone).First(admin)
+	query := datebase.GetDB().Where("phone = ?", phone).First(admin)
 	if err = query.Error; err != nil {
 		return admin, err
 	}
@@ -41,4 +44,32 @@ func (adminLogic *AdminLogic) GetByPhone(phone string) (admin *models.Admin, err
 		err = errors.New("无效账号电话号码")
 	}
 	return admin, err
+}
+
+func (adminLogic *AdminLogic) GetAdminTotal(maps interface{}) (count int) {
+	query := datebase.GetDB().Model(&models.Admin{})
+	if maps != nil {
+		query = query.Where(maps)
+	}
+	query.Count(&count)
+	return
+}
+
+//分页查询
+func (adminLogic *AdminLogic) GetAdmins(pageNum int, pageSize int, maps interface{}) (admins []models.Admin) {
+	query := datebase.GetDB()
+	if maps != nil {
+		query = query.Where(maps)
+	}
+	query.Offset(pageNum).Limit(pageSize).Find(&admins)
+	return admins
+}
+
+func GetAdminLogic() *AdminLogic {
+	once := sync.Once{}
+	once.Do(func() {
+		adminLogicSingleton = &AdminLogic{}
+	})
+
+	return adminLogicSingleton
 }

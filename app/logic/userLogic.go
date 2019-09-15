@@ -35,7 +35,7 @@ func (userLogic *UserLogic) PasswordCheck(user *models.User, password string) bo
 func (userLogic *UserLogic) GetByPhone(phone string) (user *models.User, err error) {
 	user = &models.User{}
 	err = nil
-	if datebase.DB.Where("phone = ?", phone).First(user).RecordNotFound() {
+	if datebase.GetDB().Where("phone = ?", phone).First(user).RecordNotFound() {
 		err = errors.New("无效账号电话号码")
 	}
 	return user, err
