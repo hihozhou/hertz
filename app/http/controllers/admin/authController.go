@@ -30,12 +30,12 @@ func validateLogin(c *gin.Context) adminValidator.LoginValidator {
 
 // 尝试登录
 func attemptLogin(params *adminValidator.LoginValidator) (admin *models.Admin) {
-	adminLogic := logic.GetAdminLogic()
+	al := logic.GetAdminLogic()
 	var err error
-	if admin, err = adminLogic.GetByPhone(params.Phone); err != nil {
+	if admin, err = al.GetByPhone(params.Phone); err != nil {
 		panic(err.Error())
 	}
-	if !adminLogic.PasswordCheck(admin, params.Password) {
+	if !al.PasswordCheck(admin, params.Password) {
 		panic("账号或密码错误")
 	}
 	return admin
