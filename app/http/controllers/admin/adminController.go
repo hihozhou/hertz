@@ -13,6 +13,7 @@ import (
 type AdminController struct {
 }
 
+//管理员管理首页
 func (adminController *AdminController) Index(c *gin.Context) {
 	if util.IsAjax(c) {
 		page, _ := strconv.Atoi(c.Query("page"));
@@ -22,4 +23,10 @@ func (adminController *AdminController) Index(c *gin.Context) {
 	} else {
 		c.HTML(http.StatusOK, "admin/admin/index.html", nil)
 	}
+}
+
+func (adminController *AdminController) Store(c *gin.Context) {
+	//接受参数
+	//验证器验证
+	//保存信息
 }

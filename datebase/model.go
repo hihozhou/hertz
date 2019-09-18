@@ -49,14 +49,8 @@ func init() {
 		return prefix + defaultTableName;
 	}
 
-	logMode := false
-
 	//如果是debug模式，输出sql日志
-	if setting.RunMode == "debug" {
-		logMode = true
-	}
-
-	dB.LogMode(logMode)
+	dB.LogMode(setting.AppDebug)
 
 	dB.SingularTable(true)
 	dB.DB().SetMaxIdleConns(10)

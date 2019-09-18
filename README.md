@@ -40,6 +40,7 @@
 - 配置读取：github.com/go-ini/ini
 - orm：github.com/jinzhu/gorm
 - html模板： golang 的html/template库
+- 热更新：https://github.com/gravityblast/fresh
 
 
 ## Feature
@@ -48,7 +49,7 @@
 - rpc
 - http、rpc分块，按需加载
 - tool管理
-- 命令：平滑重启，热更新
+- 命令：平滑重启
 - view
 
 
