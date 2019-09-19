@@ -8,6 +8,7 @@ import (
 	"hertz/app/models"
 )
 
+//首页控制器
 type IndexController struct {
 }
 

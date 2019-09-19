@@ -9,7 +9,8 @@ import (
 var (
 	Cfg *ini.File
 
-	RunMode string
+	RunMode  string
+	AppDebug bool
 
 	HTTPPort     int
 	ReadTimeout  time.Duration
@@ -21,7 +22,7 @@ var (
 
 func init() {
 	var err error
-	Cfg, err = ini.Load("app.ini")//读取配置文件
+	Cfg, err = ini.Load("app.ini") //读取配置文件
 
 	//判断是否有异常
 	if err != nil {
@@ -36,6 +37,11 @@ func init() {
 func LoadBase() {
 	//从配置文件中找出debug配置
 	RunMode = Cfg.Section("").Key("RUN_MODE").MustString("debug")
+	//如果是debug模式，输出sql日志
+	AppDebug = false
+	if RunMode == "debug" {
+		AppDebug = true
+	}
 }
 
 func LoadServer() {
@@ -43,8 +49,6 @@ func LoadServer() {
 	if err != nil {
 		log.Fatalf("Fail to get section 'server': %v", err)
 	}
-
-	RunMode = Cfg.Section("").Key("RUN_MODE").MustString("debug")
 
 	HTTPPort = sec.Key("HTTP_PORT").MustInt(8000)
 	ReadTimeout = time.Duration(sec.Key("READ_TIMEOUT").MustInt(60)) * time.Second

@@ -1,0 +1,305 @@
+/*全局*/
+[lying-src] {
+    cursor: pointer;
+}
+/*顶部导航*/
+.layui-layout-admin .layui-header {
+    height: 50px;
+    background-color: #373D41;
+    border-bottom: 1px solid #2a2f32;
+    box-sizing: border-box;
+}
+
+.layui-header .layui-nav {
+    padding: 0;
+}
+.layui-header .layui-nav-item {
+    line-height: 50px;
+}
+.layui-header .layui-nav-child {
+    top: 55px;
+}
+.layui-header .layui-nav-bar {
+    top: 0!important;
+    height: 3px;
+}
+.lying-logo-mini {
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    width: 50px;
+    text-align: center;
+}
+.lying-logo-mini .layui-icon {
+    color: #fff;
+    font-size: 18px;
+}
+.layui-header .layui-logo {
+    left: 50px;
+    line-height: 50px;
+    width: 130px;
+}
+.layui-header .layui-layout-left {
+    left: 180px;
+}
+/*侧栏菜单*/
+.layui-layout-admin .layui-side {
+    top: 0;
+    width: 180px;
+    border-right: 1px solid #2a2f32;
+    background-color: #373D41;
+    transition: width 0.2s;
+    z-index: 1000;
+}
+.layui-side .layui-side-scroll {
+    width: 200px;
+    transition: width 0.2s;
+}
+.layui-side .layui-nav-tree {
+    width: 180px;
+    transition: width 0.2s;
+}
+.layui-side .layui-nav {
+    background-color: rgba(255,255,255,0.1);
+}
+/*侧栏缩进图标*/
+.lying-nav-fold {
+    height: 30px;
+    line-height: 30px;
+    background-color: #373D41;
+    text-align: center;
+    cursor: pointer;
+}
+.lying-nav-fold .layui-icon {
+    display: inline-block;
+    transition: transform 0.2s;
+}
+/*菜单列表*/
+.lying-nav-item a {
+    position: relative;
+    height: 40px;
+    line-height: 40px;
+    display: block;
+    overflow: hidden;
+    color: #fff;
+    letter-spacing: 1px;
+    transition: background-color 0.2s;
+}
+/*菜单图标*/
+.lying-nav-icon {
+    width: 50px;
+    display: block;
+    text-align: center;
+}
+.lying-nav-icon .layui-icon {
+    display: inline-block;
+    transition: transform 0.2s;
+}
+.lying-nav-open .lying-nav-header .layui-icon {
+    transform: rotate(45deg);
+}
+/*菜单标题*/
+.lying-nav-title {
+    display: block;
+    width: 130px;
+    position: absolute;
+    top: 0;
+    left: 50px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+/*二级菜单*/
+.lying-nav-child {
+    background-color: #373D41;
+    overflow: hidden;
+}
+.lying-nav-child a {
+    height: 0;
+    transition: height 0.2s, background-color 0.2s;
+}
+.lying-nav-child a:hover {
+    background-color: rgba(255,255,255,0.2);
+}
+.lying-nav-open .lying-nav-child a {
+    height: 40px;
+}
+/*MINI侧栏*/
+/* .layui-side.lying-side-mini {
+    width: 50px;
+}
+.layui-side.lying-side-mini .layui-side-scroll {
+    width: 70px;
+}
+.layui-side.lying-side-mini .layui-nav-tree {
+    width: 50px;
+}
+.layui-side.lying-side-mini .lying-nav-fold .layui-icon {
+    transform: rotateY(180deg);
+} */
+/*内容主体*/
+.layui-layout-admin .layui-body {
+    top: 50px;
+    bottom: 0;
+    left: 180px;
+    overflow: hidden;
+    transition: left 0.2s;
+}
+/* .layui-side.lying-side-mini + .layui-body {
+    left: 50px;
+} */
+/*选项卡*/
+.layui-tab {
+    margin: 0;
+}
+.layui-tab-bar {
+    display: none;
+}
+/*左移右移刷新*/
+.lying-tab-goleft, .lying-tab-goright, .lying-tab-refresh {
+    position: absolute;
+    height: 40px;
+    line-height: 40px;
+    width: 40px;
+    text-align: center;
+    background-color: #fff;
+    z-index: 9999;
+    cursor: pointer;
+    border-bottom: 1px solid #f6f6f6;
+    transition: all 0.2s;
+}
+.lying-tab-goleft:hover, .lying-tab-goright:hover, .lying-tab-refresh:hover {
+    background-color: #f6f6f6;
+}
+.lying-tab-goleft {
+    left: 0;
+    border-right: 1px solid #f6f6f6;
+}
+.lying-tab-goright {
+    right: 40px;
+    border-left: 1px solid #f6f6f6;
+}
+.lying-tab-refresh {
+    right: 0;
+    border-left: 1px solid #f6f6f6;
+}
+/*重置选项卡导航条样式*/
+.layui-tab-title {
+    margin: 0 80px 0 40px;
+    border-bottom-color: #f6f6f6;
+}
+.layui-tab[overflow]>.layui-tab-title {
+    overflow: visible;
+}
+.layui-tab-brief[overflow]>.layui-tab-title .layui-this:after {
+    top: 0;
+}
+.layui-tab-title li:first-child i.layui-tab-close {
+    display: none;
+}
+.layui-tab-title li {
+    height: 40px;
+    border-bottom: 1px solid #f6f6f6;
+}
+.layui-tab-title li:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 0;
+    height: 41px;
+    border-radius: 0;
+    border-bottom: 2px solid #5FB878;
+    transition: all .2s;
+}
+.layui-tab-title li.layui-this:after {
+    width: 100%;
+}
+.layui-tab-brief>.layui-tab-title .layui-this {
+    background-color: #f6f6f6;
+}
+/*选项卡内容样式*/
+.layui-body .layui-tab-content {
+    padding: 0;
+}
+.layui-body .layui-tab-item {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 41px;
+    bottom: 0;
+}
+.layui-body iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+/*右侧抽屉*/
+.lying-anim-rl {
+    animation-name: layui-rl;
+}
+@keyframes layui-rl{
+    from { transform:translate3d(100%,0,0) }
+    to{ transform:translate3d(0,0,0) }
+}
+@keyframes layui-lr {
+    from { transform: translate3d(0,0,0) }
+    to { transform: translate3d(100%,0,0) }
+}
+.lying-layer-adminRight {
+    top: 50px!important;
+    bottom: 0;
+    box-shadow: 1px 1px 10px rgba(0,0,0,.1);
+    border-radius: 0!important;
+    overflow: auto;
+}
+.lying-anim-rl.layer-anim-close {
+    animation-name: layui-lr
+}
+
+/*css*/
+.left0{
+    left: 0!important;
+}
+.width0{
+    width: 0!important;
+}
+.width50{
+    width: 50px!important;
+}
+.left50{
+    left: 50px!important;
+}
+.width180{
+    left: 180px!important;
+}
+.left180{
+    left: 180px!important;
+}
+.show-block{
+    display: block!important;
+}
+.lying-head{
+    background-color: #373D41;
+}
+/*960下弹窗*/
+/* .layadmin-side-spread-sm .layadmin-body-shade {
+    display: block;
+} */
+.layadmin-body-shade {
+    position: fixed;
+    display: none;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,.3);
+    z-index: 1000;
+}
+@media(max-width:960px){
+    .layui-nav .layui-nav-item a {
+        display: block;
+        padding: 0 11px;
+    }
+}
+
+

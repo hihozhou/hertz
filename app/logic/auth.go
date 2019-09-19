@@ -45,6 +45,7 @@ func Login(user *models.User) gin.H {
 	}
 }
 
+// 获取登录的用户信息
 func User(c *gin.Context) (result *CustomClaims) {
 	claims, exists := c.Get("claims")
 	if !exists {
