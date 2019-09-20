@@ -26,6 +26,10 @@ function getTableOption(elem, url, cols, where, method) {
             limitName: 'limit',
 
         },
+        parseData: function (res) {
+            console.log("parseData======================")
+            console.log(res)
+        },
         response: {
             statusName: 'error_code',
             statusCode: 0,
@@ -33,8 +37,19 @@ function getTableOption(elem, url, cols, where, method) {
             dataName: 'list',
             msgName: 'error_msg'
         },
+        errorHandler: function (e, m) {
+            if (e.status === 401) {
+                if (window != top) {
+                    top.location.href = "/admin/login";
+                } else {
+                    window.location.href = "/admin/login";
+                }
+
+            }
+        },
         cols: [cols],
         done: function (res, curr, count) {
+            console.log(res)
             //数据渲染后回调
             //如果是异步请求数据方式，res即为你接口返回的信息。
             //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
@@ -50,4 +65,25 @@ function getTableOption(elem, url, cols, where, method) {
 
 function tableInit(table, elem, url, cols, where) {
     table.render(getTableOption(elem, url, cols, where));
+}
+
+
+function ajaxRequest(url, data, type, successHandler = undefined, errorHandler = undefined, async = false) {
+    console.log(url)
+    console.log(data)
+    console.log(type)
+    console.log(successHandler)
+    console.log(errorHandler)
+    // $.ajax({
+    //     type: type,
+    //     url: url,
+    //     async: async,
+    //     data: data,
+    //     success: function (res) {
+    //         successHandler(res);
+    //     },
+    //     error: function (res) {
+    //         errorHandler(res)
+    //     }
+    // });
 }
