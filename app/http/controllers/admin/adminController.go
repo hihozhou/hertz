@@ -30,3 +30,15 @@ func (adminController *AdminController) Store(c *gin.Context) {
 	//验证器验证
 	//保存信息
 }
+
+func (adminController *AdminController) Update(c *gin.Context) {
+	//接受参数
+	//验证器验证
+	//保存信息
+}
+
+func (adminController *AdminController) Delete(c *gin.Context) {
+	//接受参数
+	//验证器验证
+	//保存信息
+}

@@ -15,6 +15,11 @@ type AdminLogic struct {
 
 var adminLogicSingleton *AdminLogic
 
+var (
+	ACCOUNT_INVALID_ERROR error = errors.New("无效账号电话号码")
+	ACCOUNT_PASSWORD_WRONG_ERROR error = errors.New("账号或密码错误")
+)
+
 /*
 密码加密方法
 @author：hihozhou
@@ -39,12 +44,12 @@ func (adminLogic *AdminLogic) GetByPhone(phone string) (admin *models.Admin, err
 	//err = nil
 	query := datebase.GetDB().Where("phone = ?", phone).First(admin)
 	if err = query.Error; err != nil {
-		return admin, err
+		return nil, err
 	}
 	if query.RecordNotFound() {
-		err = errors.New("无效账号电话号码")
+		return nil, ACCOUNT_INVALID_ERROR
 	}
-	return admin, err
+	return admin, nil
 }
 
 //统计数量

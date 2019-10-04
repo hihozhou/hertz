@@ -1,7 +1,6 @@
 package admin
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"hertz/app/http/controllers"
 	adminValidator "hertz/app/http/validator/admin"
@@ -29,30 +28,28 @@ func validateLogin(c *gin.Context) adminValidator.LoginValidator {
 }
 
 // 尝试登录
-func attemptLogin(params *adminValidator.LoginValidator) (admin *models.Admin) {
+func attemptLogin(params *adminValidator.LoginValidator) (admin *models.Admin, err error) {
 	al := logic.GetAdminLogic()
-	var err error
 	if admin, err = al.GetByPhone(params.Phone); err != nil {
-		panic(err.Error())
+		return nil, err
 	}
 	if !al.PasswordCheck(admin, params.Password) {
-		panic("账号或密码错误")
+		return nil, logic.ACCOUNT_PASSWORD_WRONG_ERROR
 	}
-	return admin
+	return admin, nil
 }
 
 //登录操作
 func (auth AuthController) Login(c *gin.Context) {
-	defer func() {
-		if err := recover(); err != nil {
-			controllers.Fail(c, fmt.Sprintf("%s", err), gin.H{})
-		}
-	}()
 	//验证器验证
 	params := validateLogin(c)
 	//查询账号
-	admin := attemptLogin(&params)
-
+	admin, err := attemptLogin(&params);
+	if err != nil {
+		controllers.Fail(c, err.Error(),nil)
+		return
+	}
 	data := adminLogic.Login(c, admin)
 	controllers.Success(c, data)
+
 }
