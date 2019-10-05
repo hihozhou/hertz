@@ -35,7 +35,7 @@ func Authenticate() gin.HandlerFunc {
 			if (time.Now().Unix() - claims.NotBefore) >= admin.TokenVerifyEffective {
 				newToken, err := jwt.RefreshClaimsToken(claims)
 				if err != nil {
-					panic("创建token失败：" + err.Error())
+					UnauthorizedHandler(c, 1, "刷新token失败："+err.Error())
 				}
 				//保存到cookie中
 				admin.LoginSign(c, newToken)

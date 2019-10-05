@@ -41,14 +41,15 @@ func GenerateAdminToken(admin *models.Admin) (string, error) {
 }
 
 // 登录操作
-func Login(c *gin.Context, admin *models.Admin) gin.H {
+func Login(c *gin.Context, admin *models.Admin) (data gin.H, err error) {
 	token, err := GenerateAdminToken(admin)
 	if err != nil {
-		panic("创建token失败：" + err.Error())
+		return data, err;
 	}
 	//保存到cookie中
 	LoginSign(c, token)
-	return gin.H{"url": HOME_PATH}
+	data = gin.H{"url": HOME_PATH}
+	return data, nil
 	//return gin.H{
 	//	"admin": gin.H{
 	//		"id":       admin.ID,
@@ -74,4 +75,8 @@ func User(c *gin.Context) (result *CustomClaims) {
 
 	result = claims.(*CustomClaims)
 	return result
+}
+
+func Logout(c *gin.Context) {
+	c.SetCookie(AUTH_TOKEN_KEY, "", -1, "/", c.Request.Host, false, true)
 }

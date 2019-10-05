@@ -26,6 +26,8 @@ func CreateRoutes(router *gin.Engine) {
 	authController := &admin.AuthController{}
 	router.GET(adminModule.LOGIN_PATH, adminMiddleware.RedirectIfAuthenticated(), authController.LoginForm)
 	router.POST("/admin/login", authController.Login)
+	router.GET("/admin/logout", authController.Logout)
+
 	//后台路由
 	adminGroup := router.Group("/admin", adminMiddleware.Authenticate())
 	{
