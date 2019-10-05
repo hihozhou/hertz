@@ -65,3 +65,8 @@ func CloseDB() {
 func GetDB() *gorm.DB {
 	return dB
 }
+
+func New() *gorm.DB {
+	newDB := *dB
+	return &newDB
+}

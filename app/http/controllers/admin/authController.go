@@ -20,6 +20,7 @@ func (auth *AuthController) LoginForm(c *gin.Context) {
 
 // 登录验证
 func validateLogin(c *gin.Context) (params *adminValidator.LoginValidator, err error) {
+	params = &adminValidator.LoginValidator{}
 	err = c.ShouldBind(params);
 	return params, err
 }
