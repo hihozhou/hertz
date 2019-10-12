@@ -18,13 +18,17 @@ func CreateRoutes(router *gin.Engine) {
 	//加载静态文件
 	router.StaticFS("/static", http.Dir("./resources/static"))
 
+	//接口访问nocache
+	router.Use(middleware.NoCache)
+
 	indexController := &controllers.IndexController{}
 	router.GET("/", indexController.Index)
 	router.POST("/login", indexController.Login)
 	router.GET("/home", middleware.Authenticate(), indexController.Home)
 
 	authController := &admin.AuthController{}
-	router.GET(adminModule.LOGIN_PATH, adminMiddleware.RedirectIfAuthenticated(), authController.LoginForm)
+	//router.GET(adminModule.LOGIN_PATH, adminMiddleware.RedirectIfAuthenticated(), authController.LoginForm)
+	router.GET(adminModule.LOGIN_PATH, authController.LoginForm)
 	router.POST("/admin/login", authController.Login)
 	router.GET("/admin/logout", authController.Logout)
 
